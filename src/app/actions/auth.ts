@@ -3,9 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { PrismaClient, Role } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 export async function signup(prevState: any, formData: FormData) {
   const email = (formData.get("email") as string)?.trim();

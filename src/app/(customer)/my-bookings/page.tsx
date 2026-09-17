@@ -1,12 +1,10 @@
-﻿import React from "react";
+import React from "react";
 import { createClient } from "@/utils/supabase/server";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Clock, CheckCircle2, Calendar, ArrowUpRight } from "lucide-react";
 import { FadeIn } from "@/components/motion-client";
-
-const prisma = new PrismaClient();
 
 const creatorImageMap: Record<string, string> = {
   divyesh: "/creators/divyesh.jpg",

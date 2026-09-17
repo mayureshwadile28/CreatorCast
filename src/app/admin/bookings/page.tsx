@@ -1,9 +1,7 @@
 import React from "react";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { BookingStatusActions } from "./status-actions";
 import { Calendar, Clock, CheckCircle2 } from "lucide-react";
-
-const prisma = new PrismaClient();
 
 interface BookingRecord {
   id: string;

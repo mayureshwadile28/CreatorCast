@@ -1,10 +1,8 @@
 "use server";
 
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-
-const prisma = new PrismaClient();
 
 export interface BookingSubmissionData {
   artistId: string;

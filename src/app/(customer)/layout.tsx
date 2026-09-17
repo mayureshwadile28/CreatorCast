@@ -1,28 +1,34 @@
 import React from "react";
 import Link from "next/link";
 import { createClient } from "@/utils/supabase/server";
-import { PrismaClient, Role } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 import { logout } from "@/app/actions/auth";
 import { CustomerNav } from "@/components/customer-nav";
 
-const prisma = new PrismaClient();
+export const dynamic = "force-dynamic";
 
 export default async function CustomerLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
+  let user = null;
   let isAdmin = false;
-  if (user?.email) {
-    const dbUser = await prisma.user.findUnique({
-      where: { email: user.email },
-    });
-    isAdmin = dbUser?.role === Role.ADMIN;
+
+  try {
+    const supabase = await createClient();
+    const { data } = await supabase.auth.getUser();
+    user = data?.user || null;
+
+    if (user?.email) {
+      const dbUser = await prisma.user.findUnique({
+        where: { email: user.email },
+      });
+      isAdmin = dbUser?.role === Role.ADMIN;
+    }
+  } catch (err) {
+    console.warn("Layout session resolution skipped:", err);
   }
 
   return (

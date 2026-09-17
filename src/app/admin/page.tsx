@@ -1,9 +1,7 @@
 import React from "react";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { Sparkles, Users, Shield, CalendarCheck, ArrowUpRight } from "lucide-react";
-
-const prisma = new PrismaClient();
 
 export default async function AdminDashboardPage() {
   const artistsCount = await prisma.artist.count();

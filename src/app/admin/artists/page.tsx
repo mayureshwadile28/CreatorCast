@@ -1,10 +1,8 @@
 import React from "react";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import { DeleteArtistButton } from "./delete-button";
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
-
-const prisma = new PrismaClient();
 
 export default async function AdminArtistsPage() {
   const artists = await prisma.artist.findMany({

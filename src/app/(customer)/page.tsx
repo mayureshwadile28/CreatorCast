@@ -11,8 +11,7 @@ import {
   ArtistCardHover,
 } from "@/components/motion-client";
 import { AnimatedCounter } from "@/components/animated-counter";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 // Fallback metadata dictionary for seeded creators
 const creatorMetadataMap: Record<
@@ -60,12 +59,14 @@ function formatClientCount(count: number): string {
 }
 
 export default async function CustomerDirectoryPage() {
-  const artists = await prisma.artist.findMany({
-    orderBy: { name: "asc" },
-  });
-
+  let artists: any[] = [];
   let countMap = new Map<string, number>();
+
   try {
+    artists = await prisma.artist.findMany({
+      orderBy: { name: "asc" },
+    });
+
     const bookingCounts: { artistId: string; count: number }[] =
       await prisma.$queryRawUnsafe(`
       SELECT "artistId", count(*)::int as count 
@@ -74,7 +75,7 @@ export default async function CustomerDirectoryPage() {
     `);
     countMap = new Map(bookingCounts.map((b) => [b.artistId, b.count]));
   } catch (err) {
-    console.error("Error fetching booking counts:", err);
+    console.error("Database query error:", err);
   }
 
   return (

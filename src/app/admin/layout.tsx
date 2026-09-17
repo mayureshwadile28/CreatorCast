@@ -2,10 +2,9 @@ import React from "react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/utils/supabase/server";
-import { PrismaClient, Role } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 import { logout } from "@/app/actions/auth";
-
-const prisma = new PrismaClient();
 
 export default async function AdminLayout({
   children,

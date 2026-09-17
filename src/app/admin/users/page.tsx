@@ -1,9 +1,7 @@
 import React from "react";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { Users, Shield, UserCheck, Clock, Calendar, Mail, CheckCircle2 } from "lucide-react";
-
-const prisma = new PrismaClient();
 
 interface UserRow {
   id: string;

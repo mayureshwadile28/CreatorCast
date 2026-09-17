@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
-import { PrismaClient, Role } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 
 export async function GET(request: Request) {
   const { searchParams, origin } = new URL(request.url);

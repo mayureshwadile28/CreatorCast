@@ -1,10 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { PrismaClient, Role } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
+import { Role } from "@prisma/client";
 import { createClient } from "@/utils/supabase/server";
-
-const prisma = new PrismaClient();
 
 async function requireAdmin() {
   const supabase = await createClient();

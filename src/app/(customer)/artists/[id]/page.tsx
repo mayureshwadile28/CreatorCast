@@ -8,8 +8,7 @@ import { BookingModal } from "@/components/booking-modal";
 import { FadeIn } from "@/components/motion-client";
 import { AnimatedCounter } from "@/components/animated-counter";
 import { createClient } from "@/utils/supabase/server";
-
-const prisma = new PrismaClient();
+import { prisma } from "@/lib/prisma";
 
 // Fallback metadata dictionary for seeded creators
 const creatorFallbackMap: Record<
