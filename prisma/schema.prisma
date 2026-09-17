@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  DECLINED
+}
+
+model User {
+  id        String    @id @default(uuid())
+  email     String    @unique
+  name      String?
+  avatarUrl String?
+  role      Role      @default(CUSTOMER)
+  lastLogin DateTime? @default(now())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  artist    Artist?
+  bookings  Booking[]
+}
+
+model Artist {
+  id          String    @id @default(uuid())
+  userId      String    @unique
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name        String
+  bio         String?
+  avatarUrl   String?
+  category    String?   @default("Creator")
+  genre       String?   @default("Culture")
+  tagline     String?
+  stats       Json?
+  bookings    Booking[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Booking {
+  id           String        @id @default(uuid())
+  artistId     String
+  artist       Artist        @relation(fields: [artistId], references: [id], onDelete: Cascade)
+  userId       String?
+  user         User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  clientName   String
+  clientEmail  String
+  accountName  String?
+  accountEmail String?
+  company      String?
+  eventType    String
+  budget       String
+  eventDate    String?
+  notes        String?
+  status       BookingStatus @default(PENDING)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+

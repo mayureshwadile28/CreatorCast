@@ -1,26 +1,159 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #f4f4f5;
+  --card: #09090b;
+  --card-foreground: #f4f4f5;
+  --popover: #09090b;
+  --popover-foreground: #f4f4f5;
+  --primary: #ffffff;
+  --primary-foreground: #000000;
+  --secondary: #18181b;
+  --secondary-foreground: #f4f4f5;
+  --muted: #18181b;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #f4f4f5;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #d4d4d8;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --font-sans: var(--font-inter), sans-serif;
+  --font-outfit: var(--font-outfit), sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000000;
+  color: #f4f4f5;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: clip;
 }
+
+.font-editorial {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+}
+
+.font-heading {
+  font-family: var(--font-outfit), sans-serif;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000000;
+}
+::-webkit-scrollbar-thumb {
+  background: #27272a;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #3f3f46;
+}
+
+/* Date input dark mode styling */
+input[type="date"] {
+  color-scheme: dark;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.85);
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+/* Glassmorphism Design System */
+.glass-panel {
+  background: rgba(18, 18, 22, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.025);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.045);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 16px 40px 0 rgba(255, 255, 255, 0.04);
+}
+
+.glass-nav {
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-modal {
+  background: rgba(10, 10, 14, 0.85);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Ambient glow accents */
+.ambient-glow-top {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(120, 119, 198, 0.12) 0%, rgba(255, 255, 255, 0.03) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.ambient-glow-side {
+  position: absolute;
+  top: 30%;
+  right: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
