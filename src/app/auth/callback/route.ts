@@ -20,35 +20,40 @@ export async function GET(request: Request) {
       const avatarUrl = metadata.avatar_url || metadata.picture || null;
 
       // Upsert user in Prisma with Google name, avatar, and lastLogin
-      let dbUser = await prisma.user.findUnique({
-        where: { email: data.user.email },
-      });
-
-      if (!dbUser) {
-        dbUser = await prisma.user.create({
-          data: {
-            id: data.user.id,
-            email: data.user.email,
-            name: googleName,
-            avatarUrl: avatarUrl,
-            role: Role.CUSTOMER,
-            lastLogin: new Date(),
-          },
-        });
-      } else {
-        dbUser = await prisma.user.update({
+      try {
+        let dbUser = await prisma.user.findUnique({
           where: { email: data.user.email },
-          data: {
-            name: dbUser.name || googleName,
-            avatarUrl: dbUser.avatarUrl || avatarUrl,
-            lastLogin: new Date(),
-          },
         });
-      }
 
-      if (dbUser.role === Role.ADMIN) {
-        return NextResponse.redirect(`${origin}/admin`);
-      } else {
+        if (!dbUser) {
+          dbUser = await prisma.user.create({
+            data: {
+              id: data.user.id,
+              email: data.user.email,
+              name: googleName,
+              avatarUrl: avatarUrl,
+              role: Role.CUSTOMER,
+              lastLogin: new Date(),
+            },
+          });
+        } else {
+          dbUser = await prisma.user.update({
+            where: { email: data.user.email },
+            data: {
+              name: dbUser.name || googleName,
+              avatarUrl: dbUser.avatarUrl || avatarUrl,
+              lastLogin: new Date(),
+            },
+          });
+        }
+
+        if (dbUser.role === Role.ADMIN) {
+          return NextResponse.redirect(`${origin}/admin`);
+        } else {
+          return NextResponse.redirect(`${origin}/`);
+        }
+      } catch (dbErr) {
+        console.error("Prisma user upsert failed in callback:", dbErr);
         return NextResponse.redirect(`${origin}/`);
       }
     }

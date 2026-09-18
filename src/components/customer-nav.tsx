@@ -16,28 +16,43 @@ export function CustomerNav({ user, isAdmin, logoutAction }: CustomerNavProps) {
 
   const closeMobile = () => setMobileMenuOpen(false);
 
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    if (typeof window !== "undefined" && (window.location.pathname === "/" || window.location.pathname === "")) {
+      e.preventDefault();
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+        window.history.replaceState(null, "", `#${targetId}`);
+      }
+      setMobileMenuOpen(false);
+    }
+  };
+
   return (
     <>
       {/* Desktop Navigation */}
       <nav className="hidden md:flex items-center space-x-8 text-xs tracking-[0.2em] uppercase font-medium">
-        <Link
+        <a
           href="/#roster"
-          className="text-zinc-300 hover:text-white transition-colors duration-200"
+          onClick={(e) => handleNavClick(e, "roster")}
+          className="text-zinc-300 hover:text-white transition-colors duration-200 cursor-pointer"
         >
           The Roster
-        </Link>
-        <Link
+        </a>
+        <a
           href="/#impact"
-          className="text-zinc-400 hover:text-white transition-colors duration-200"
+          onClick={(e) => handleNavClick(e, "impact")}
+          className="text-zinc-400 hover:text-white transition-colors duration-200 cursor-pointer"
         >
           Impact
-        </Link>
-        <Link
+        </a>
+        <a
           href="/#press"
-          className="text-zinc-400 hover:text-white transition-colors duration-200"
+          onClick={(e) => handleNavClick(e, "press")}
+          className="text-zinc-400 hover:text-white transition-colors duration-200 cursor-pointer"
         >
           Press
-        </Link>
+        </a>
 
         {/* Customer My Inquiries Link */}
         {user && (
@@ -120,30 +135,30 @@ export function CustomerNav({ user, isAdmin, logoutAction }: CustomerNavProps) {
             className="fixed inset-x-0 top-20 z-40 bg-black/95 backdrop-blur-2xl border-b border-white/10 p-6 md:hidden shadow-2xl"
           >
             <div className="flex flex-col space-y-2 text-sm uppercase tracking-[0.2em] font-heading font-semibold">
-              <Link
+              <a
                 href="/#roster"
-                onClick={closeMobile}
-                className="text-zinc-300 hover:text-white py-3 min-h-[48px] border-b border-white/5 flex items-center justify-between"
+                onClick={(e) => handleNavClick(e, "roster")}
+                className="text-zinc-300 hover:text-white py-3 min-h-[48px] border-b border-white/5 flex items-center justify-between cursor-pointer"
               >
                 <span>The Roster</span>
                 <ArrowUpRight className="w-4 h-4 text-zinc-500" />
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/#impact"
-                onClick={closeMobile}
-                className="text-zinc-300 hover:text-white py-3 min-h-[48px] border-b border-white/5 flex items-center justify-between"
+                onClick={(e) => handleNavClick(e, "impact")}
+                className="text-zinc-300 hover:text-white py-3 min-h-[48px] border-b border-white/5 flex items-center justify-between cursor-pointer"
               >
                 <span>Agency Impact</span>
                 <ArrowUpRight className="w-4 h-4 text-zinc-500" />
-              </Link>
-              <Link
+              </a>
+              <a
                 href="/#press"
-                onClick={closeMobile}
-                className="text-zinc-300 hover:text-white py-3 min-h-[48px] border-b border-white/5 flex items-center justify-between"
+                onClick={(e) => handleNavClick(e, "press")}
+                className="text-zinc-300 hover:text-white py-3 min-h-[48px] border-b border-white/5 flex items-center justify-between cursor-pointer"
               >
                 <span>Press & Media</span>
                 <ArrowUpRight className="w-4 h-4 text-zinc-500" />
-              </Link>
+              </a>
 
               {user && (
                 <Link

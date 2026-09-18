@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
@@ -114,12 +115,26 @@ export async function login(prevState: any, formData: FormData) {
 
 export async function signInWithGoogle() {
   const supabase = await createClient();
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  let origin = process.env.NEXT_PUBLIC_SITE_URL;
+  try {
+    const headersList = await headers();
+    const host = headersList.get("x-forwarded-host") || headersList.get("host");
+    const proto = headersList.get("x-forwarded-proto") || "https";
+    if (host) {
+      origin = `${proto}://${host}`;
+    }
+  } catch {
+    // fallback
+  }
+
+  if (!origin) {
+    origin = "http://localhost:3000";
+  }
 
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: `${siteUrl}/auth/callback`,
+      redirectTo: `${origin}/auth/callback`,
     },
   });
 

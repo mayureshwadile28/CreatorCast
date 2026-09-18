@@ -50,30 +50,13 @@ const pressOutlets = [
   { name: "GQ", font: "tracking-widest font-black" },
 ];
 
-function formatClientCount(count: number): string {
-  if (!count || count === 0) return "Open for Bookings";
-  if (count === 1) return "1 Client";
-  if (count < 1000) return `${count} Clients`;
-  const inK = (count / 1000).toFixed(1).replace(/\.0$/, "");
-  return `${inK}K Clients`;
-}
-
 export default async function CustomerDirectoryPage() {
   let artists: any[] = [];
-  let countMap = new Map<string, number>();
 
   try {
     artists = await prisma.artist.findMany({
       orderBy: { name: "asc" },
     });
-
-    const bookingCounts: { artistId: string; count: number }[] =
-      await prisma.$queryRawUnsafe(`
-      SELECT "artistId", count(*)::int as count 
-      FROM "Booking" 
-      GROUP BY "artistId"
-    `);
-    countMap = new Map(bookingCounts.map((b) => [b.artistId, b.count]));
   } catch (err) {
     console.error("Database query error:", err);
   }
@@ -283,24 +266,15 @@ export default async function CustomerDirectoryPage() {
                           {/* Gradient Shadows */}
                           <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/30 to-transparent opacity-90 group-hover:opacity-75 transition-opacity" />
 
-                          {/* Top Tag with curved pill & live client badge */}
+                          {/* Top Tag with curved pill & status */}
                           <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
                             <span className="text-[10px] uppercase tracking-[0.2em] font-semibold text-zinc-300 glass-pill px-3 py-1 rounded-full">
                               {(artist as any).category || meta.category}
                             </span>
                             <div className="flex items-center gap-2">
-                              {(countMap.get(artist.id) ?? 0) > 0 ? (
-                                <span className="text-[10px] font-mono tracking-wider text-emerald-300 bg-black/80 border border-emerald-500/40 px-2.5 py-1 rounded-full backdrop-blur-md shadow-sm">
-                                  ●{" "}
-                                  {formatClientCount(
-                                    countMap.get(artist.id) ?? 0
-                                  )}
-                                </span>
-                              ) : (
-                                <span className="text-[10px] font-mono tracking-wider text-zinc-400 bg-black/60 border border-white/10 px-2.5 py-1 rounded-full backdrop-blur-md">
-                                  Available
-                                </span>
-                              )}
+                              <span className="text-[10px] font-mono tracking-wider text-zinc-400 bg-black/60 border border-white/10 px-2.5 py-1 rounded-full backdrop-blur-md">
+                                Available
+                              </span>
                               <div className="w-8 h-8 rounded-full glass-pill flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                 <ArrowUpRight className="w-3.5 h-3.5 text-white" />
                               </div>

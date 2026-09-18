@@ -6,6 +6,8 @@ import { Role } from "@prisma/client";
 import { logout } from "@/app/actions/auth";
 import { CustomerNav } from "@/components/customer-nav";
 
+import { cookies } from "next/headers";
+
 export const dynamic = "force-dynamic";
 
 export default async function CustomerLayout({
@@ -17,15 +19,21 @@ export default async function CustomerLayout({
   let isAdmin = false;
 
   try {
-    const supabase = await createClient();
-    const { data } = await supabase.auth.getUser();
-    user = data?.user || null;
+    const cookieStore = await cookies();
+    const hasAuth = cookieStore.getAll().some((c) => c.name.startsWith("sb-"));
 
-    if (user?.email) {
-      const dbUser = await prisma.user.findUnique({
-        where: { email: user.email },
-      });
-      isAdmin = dbUser?.role === Role.ADMIN;
+    if (hasAuth) {
+      const supabase = await createClient();
+      const { data } = await supabase.auth.getUser();
+      user = data?.user || null;
+
+      if (user?.email) {
+        const dbUser = await prisma.user.findUnique({
+          where: { email: user.email },
+          select: { role: true },
+        });
+        isAdmin = dbUser?.role === Role.ADMIN;
+      }
     }
   } catch (err) {
     console.warn("Layout session resolution skipped:", err);

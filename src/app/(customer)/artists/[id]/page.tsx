@@ -67,13 +67,6 @@ const creatorFallbackMap: Record<
   },
 };
 
-function formatClientCount(count: number): string {
-  if (!count || count === 0) return "Open for Inquiries";
-  if (count === 1) return "1 Client";
-  if (count < 1000) return `${count} Clients`;
-  const inK = (count / 1000).toFixed(1).replace(/\.0$/, "");
-  return `${inK}K Clients`;
-}
 
 export default async function ArtistProfilePage({
   params,
@@ -101,16 +94,6 @@ export default async function ArtistProfilePage({
     "";
   const initialEmail = user?.email || "";
 
-  let clientCount = 0;
-  try {
-    const bookingRes: any[] = await prisma.$queryRawUnsafe(
-      `SELECT count(*)::int as count FROM "Booking" WHERE "artistId" = $1`,
-      artist.id
-    );
-    clientCount = bookingRes?.[0]?.count || 0;
-  } catch (err) {
-    console.error("Error fetching artist booking count:", err);
-  }
 
   // Get index or rank in roster
   const allArtists = await prisma.artist.findMany({
@@ -202,15 +185,9 @@ export default async function ArtistProfilePage({
                   <span className="text-[11px] sm:text-xs uppercase tracking-[0.18em] sm:tracking-[0.25em] text-zinc-300 font-mono px-3 py-1 rounded-full glass-pill">
                     ROSTER {rosterNumber} · {category}
                   </span>
-                  {clientCount > 0 ? (
-                    <span className="text-[11px] uppercase font-mono tracking-wider text-emerald-300 bg-emerald-950/60 border border-emerald-500/40 px-3 py-1 rounded-full">
-                      ● {formatClientCount(clientCount)}
-                    </span>
-                  ) : (
-                    <span className="text-[11px] uppercase font-mono tracking-wider text-zinc-400 bg-black/60 border border-white/10 px-3 py-1 rounded-full">
-                      ● Available for Inquiries
-                    </span>
-                  )}
+                  <span className="text-[11px] uppercase font-mono tracking-wider text-zinc-400 bg-black/60 border border-white/10 px-3 py-1 rounded-full">
+                    ● Available for Inquiries
+                  </span>
                 </div>
                 <span className="font-editorial text-zinc-400 text-base sm:text-lg md:text-xl">
                   {genre}
