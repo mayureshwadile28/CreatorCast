@@ -1,18 +1,26 @@
 import React from "react";
 import Link from "next/link";
-import { ArrowUpRight, Sparkles, TrendingUp, Users, Award, ShieldCheck, Zap } from "lucide-react";
-import { FadeIn, ScrollReveal } from "@/components/motion-client";
-import { AnimatedCounter } from "@/components/animated-counter";
+import Image from "next/image";
+import { ArrowRight, ArrowUpRight, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { prisma } from "@/lib/prisma";
 import { createClient } from "@/utils/supabase/server";
 import { RosterShowcase } from "@/components/roster-showcase";
 
+const fallbackAvatarMap: Record<string, string> = {
+  divyesh: "/creators/divyesh.jpg",
+  mayuresh: "/creators/mayuresh.jpg",
+  vedant: "/creators/vedant.jpg",
+  yogesh: "/creators/yogesh.jpg",
+};
+
 const pressOutlets = [
-  { name: "Billboard", font: "tracking-wider font-bold" },
-  { name: "Rolling Stone", font: "tracking-wide font-extrabold" },
-  { name: "Forbes", font: "tracking-normal font-bold" },
-  { name: "GQ India", font: "tracking-widest font-black" },
-  { name: "TechCrunch", font: "tracking-tight font-semibold" },
+  { name: "Billboard", font: "font-serif tracking-wider" },
+  { name: "Rolling Stone", font: "font-serif tracking-normal" },
+  { name: "Forbes", font: "font-serif tracking-tight" },
+  { name: "GQ India", font: "font-sans tracking-widest font-black" },
+  { name: "TechCrunch", font: "font-mono tracking-tight font-semibold" },
 ];
 
 export default async function CustomerDirectoryPage() {
@@ -31,168 +39,184 @@ export default async function CustomerDirectoryPage() {
     console.error("Home page data error:", err);
   }
 
+  // Curated preview artists for the hero strip
+  const previewArtists = artists.slice(0, 4);
+
   return (
-    <div className="bg-[#07080b] text-[#f8fafc] min-h-screen">
-      {/* 1. HERO SECTION */}
-      <section className="relative pt-12 pb-16 md:pt-24 md:pb-24 border-b border-white/10 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 relative z-10">
-          <FadeIn duration={0.8}>
-            {/* Top Pill Announcement */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-mono mb-6">
-              <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-              <span>Next-Gen Creator Representation</span>
-            </div>
+    <div className="bg-[#09090b] text-[#fafafa] min-h-screen">
+      {/* 1. HERO SECTION — AUTHENTIC AGENCY EDITORIAL */}
+      <section className="relative pt-12 pb-16 md:pt-20 md:pb-24 border-b border-zinc-850 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
+          {/* Agency Badge */}
+          <div className="flex items-center gap-2 mb-6">
+            <span className="text-[11px] font-mono uppercase tracking-widest text-zinc-400 border border-zinc-800 bg-zinc-900/80 px-3 py-1 rounded-md">
+              Contemporary Talent &amp; Cultural Representation
+            </span>
+          </div>
 
-            {/* Main Headline */}
-            <div className="max-w-4xl">
-              <h1 className="font-heading font-black text-3xl sm:text-5xl md:text-7xl lg:text-8xl tracking-tight leading-[1.05] uppercase text-white">
-                Discover & Book <br />
-                <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-white bg-clip-text text-transparent">
-                  Elite Creators.
+          {/* Editorial Headline */}
+          <div className="max-w-4xl">
+            <h1 className="font-heading font-bold text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-tight leading-[1.08] text-white">
+              Representing the voices shaping modern culture.
+            </h1>
+            <p className="mt-6 text-zinc-400 text-base sm:text-lg md:text-xl font-normal leading-relaxed max-w-2xl">
+              CreatorCast manages India’s premier digital creators, visionary filmmakers, and cultural leaders — engineering landmark commercial partnerships, brand campaigns, and creative ventures.
+            </p>
+          </div>
+
+          {/* Action Row with official Shadcn UI Buttons */}
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            <Button size="lg" asChild className="bg-white text-zinc-950 hover:bg-zinc-200 font-medium px-6 py-2.5 rounded-lg shadow-sm">
+              <a href="#roster">
+                <span>View Talent Roster</span>
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </a>
+            </Button>
+            <Button size="lg" variant="outline" asChild className="border-zinc-800 bg-zinc-900/60 hover:bg-zinc-800 text-zinc-300 font-medium px-6 py-2.5 rounded-lg">
+              <Link href={user ? "/my-bookings" : "/login"}>
+                <span>{user ? "Client Inquiries" : "Client Access"}</span>
+              </Link>
+            </Button>
+          </div>
+
+          {/* Hero Visual Roster Preview Strip */}
+          {previewArtists.length > 0 && (
+            <div className="mt-14 pt-10 border-t border-zinc-850">
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-xs uppercase font-mono tracking-widest text-zinc-500">
+                  Featured Representation
                 </span>
-              </h1>
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={0.2} duration={0.8}>
-            <div className="mt-6 md:mt-8 pt-6 border-t border-white/10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <p className="text-zinc-400 text-sm sm:text-base md:text-lg max-w-xl font-normal leading-relaxed">
-                Empowering India's leading musicians, filmmakers, and digital icons. Seamless booking, transparent inquiry workflows, and verified talent.
-              </p>
-              <div className="flex flex-wrap items-center gap-3">
-                <Link
+                <a
                   href="#roster"
-                  className="w-full sm:w-auto text-center px-6 py-3.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs uppercase tracking-wider font-heading font-bold rounded-full shadow-lg shadow-indigo-600/30 transition-all inline-flex items-center justify-center gap-2 group cursor-pointer"
+                  className="text-xs text-zinc-400 hover:text-white inline-flex items-center gap-1 font-medium transition-colors"
                 >
-                  <span>Explore Roster</span>
-                  <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
-                <Link
-                  href="/login"
-                  className="w-full sm:w-auto text-center px-6 py-3.5 bg-white/[0.05] hover:bg-white/10 text-white text-xs uppercase tracking-wider font-heading font-bold rounded-full border border-white/10 transition-all inline-flex items-center justify-center cursor-pointer"
-                >
-                  <span>Client Login</span>
-                </Link>
+                  <span>Explore full roster ({artists.length})</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+                {previewArtists.map((artist) => {
+                  const key = artist.name.toLowerCase().split(" ")[0];
+                  const avatarSrc = artist.avatarUrl || fallbackAvatarMap[key] || "/creators/divyesh.jpg";
+
+                  return (
+                    <Link
+                      key={artist.id}
+                      href={`/artists/${artist.id}`}
+                      className="group relative block aspect-[4/5] rounded-xl overflow-hidden bg-zinc-900 border border-zinc-850 hover:border-zinc-700 transition-all"
+                    >
+                      <Image
+                        src={avatarSrc}
+                        alt={artist.name}
+                        fill
+                        className="object-cover object-top filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
+                      <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4">
+                        <span className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-0.5">
+                          {artist.category || "Creator"}
+                        </span>
+                        <h4 className="font-heading font-semibold text-sm sm:text-base text-white truncate">
+                          {artist.name}
+                        </h4>
+                      </div>
+                    </Link>
+                  );
+                })}
               </div>
             </div>
-          </FadeIn>
+          )}
         </div>
       </section>
 
-      {/* 2. STATS & AGENCY IMPACT */}
+      {/* 2. STATS & AGENCY PROOF METRICS STRIP */}
       <section
         id="impact"
-        className="py-16 md:py-24 border-b border-white/10 bg-[#0a0d14]/70 backdrop-blur-md relative"
+        className="py-12 md:py-16 border-b border-zinc-850 bg-[#0c0c0e]"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-          <ScrollReveal>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="glass-card p-6 md:p-8 rounded-2xl border border-white/10 relative overflow-hidden">
-                <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-4 text-indigo-400">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <div className="mb-2">
-                  <AnimatedCounter
-                    value={140}
-                    suffix="M+"
-                    className="font-heading font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white"
-                  />
-                </div>
-                <h4 className="text-sm font-heading font-bold text-zinc-200 uppercase tracking-wider">
-                  Audience Reach
-                </h4>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Combined monthly cross-platform impressions and streaming listenership.
-                </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 divide-y lg:divide-y-0 lg:divide-x divide-zinc-850">
+            <div className="pt-4 lg:pt-0 lg:pl-6 first:pl-0">
+              <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-1">
+                Commercial Volume
+              </span>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white tracking-tight">
+                ₹12.5 Cr+
               </div>
-
-              <div className="glass-card p-6 md:p-8 rounded-2xl border border-white/10 relative overflow-hidden">
-                <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center mb-4 text-violet-400">
-                  <Users className="w-5 h-5" />
-                </div>
-                <div className="mb-2">
-                  <AnimatedCounter
-                    value={45}
-                    suffix="M+"
-                    className="font-heading font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white"
-                  />
-                </div>
-                <h4 className="text-sm font-heading font-bold text-zinc-200 uppercase tracking-wider">
-                  Community Followers
-                </h4>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Engaged fans across Spotify, YouTube, Instagram, and Twitch.
-                </p>
-              </div>
-
-              <div className="glass-card p-6 md:p-8 rounded-2xl border border-white/10 relative overflow-hidden">
-                <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-4 text-emerald-400">
-                  <ShieldCheck className="w-5 h-5" />
-                </div>
-                <div className="mb-2">
-                  <AnimatedCounter
-                    value={99}
-                    suffix="%"
-                    className="font-heading font-black text-4xl sm:text-5xl md:text-6xl tracking-tight text-white"
-                  />
-                </div>
-                <h4 className="text-sm font-heading font-bold text-zinc-200 uppercase tracking-wider">
-                  Delivery Success
-                </h4>
-                <p className="text-xs text-zinc-400 mt-1">
-                  Completed bookings with brand partners and direct event inquiries.
-                </p>
-              </div>
+              <p className="text-xs text-zinc-400 mt-1">Brand partnerships transacted</p>
             </div>
-          </ScrollReveal>
+
+            <div className="pt-4 lg:pt-0 lg:pl-6">
+              <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-1">
+                Audience Reach
+              </span>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white tracking-tight">
+                48M+
+              </div>
+              <p className="text-xs text-zinc-400 mt-1">Cross-platform subscriber network</p>
+            </div>
+
+            <div className="pt-4 lg:pt-0 lg:pl-6">
+              <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-1">
+                Contract Security
+              </span>
+              <div className="text-2xl sm:text-3xl lg:text-4xl font-heading font-bold text-white tracking-tight">
+                100%
+              </div>
+              <p className="text-xs text-zinc-400 mt-1">Vetted agency representation</p>
+            </div>
+
+            <div className="pt-4 lg:pt-0 lg:pl-6">
+              <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-1">
+                Operations
+              </span>
+              <div className="text-xl sm:text-2xl font-heading font-bold text-white tracking-tight">
+                Mumbai · Bengaluru
+              </div>
+              <p className="text-xs text-zinc-400 mt-1">New Delhi representation desks</p>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* 3. PRESS & MEDIA STRIP */}
-      <section
-        id="press"
-        className="py-12 border-b border-white/10 bg-[#07090e]"
-      >
+      {/* 3. ROSTER SHOWCASE SECTION */}
+      <section id="roster" className="py-16 md:py-24 border-b border-zinc-850">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-          <ScrollReveal>
-            <div className="text-[11px] uppercase tracking-[0.25em] text-zinc-400 mb-6 font-mono font-medium">
-              Featured In Media & Publications
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-1">
+                Official Directory
+              </span>
+              <h2 className="font-heading font-bold text-2xl sm:text-4xl text-white tracking-tight">
+                Talent Roster &amp; Representation
+              </h2>
             </div>
-            <div className="flex flex-wrap items-center justify-between gap-6 sm:gap-8 opacity-70 hover:opacity-100 transition-opacity">
-              {pressOutlets.map((outlet, idx) => (
-                <div
-                  key={idx}
-                  className={`text-zinc-300 text-base sm:text-lg md:text-xl uppercase select-none ${outlet.font}`}
-                >
-                  {outlet.name}
-                </div>
-              ))}
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+            <p className="text-xs text-zinc-400 max-w-sm font-sans">
+              Direct booking and brand collaboration inquiries reviewed by our representation team within 24 hours.
+            </p>
+          </div>
 
-      {/* 4. THE ROSTER SHOWCASE */}
-      <section id="roster" className="py-16 md:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12">
-          <ScrollReveal>
-            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 pb-6 border-b border-white/10">
-              <div>
-                <span className="text-xs uppercase font-mono tracking-widest text-indigo-400 block mb-2">
-                  Talent Directory
-                </span>
-                <h2 className="font-heading font-black text-3xl sm:text-4xl md:text-5xl tracking-tight text-white uppercase">
-                  Featured Creators
-                </h2>
-              </div>
-              <p className="text-zinc-400 text-sm md:text-base mt-2 md:mt-0 font-normal">
-                Select a creator to review their portfolio or initiate a direct booking inquiry.
-              </p>
-            </div>
-          </ScrollReveal>
-
-          {/* Client Interactive Filter & Grid */}
           <RosterShowcase artists={artists} currentUser={user} />
+        </div>
+      </section>
+
+      {/* 4. PRESS & MEDIA ACCREDITATION */}
+      <section id="press" className="py-14 border-b border-zinc-850 bg-[#0c0c0e]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-12 text-center">
+          <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-6">
+            Featured In Leading Publications
+          </span>
+          <div className="flex flex-wrap items-center justify-center gap-8 md:gap-14 opacity-60">
+            {pressOutlets.map((outlet, idx) => (
+              <span
+                key={idx}
+                className={`text-zinc-300 text-lg md:text-xl ${outlet.font} select-none`}
+              >
+                {outlet.name}
+              </span>
+            ))}
+          </div>
         </div>
       </section>
     </div>

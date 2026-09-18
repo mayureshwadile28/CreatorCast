@@ -3,6 +3,7 @@
 import React, { useState, useTransition } from "react";
 import { Plus, X, Sparkles, Image as ImageIcon, CheckCircle2, AlertCircle } from "lucide-react";
 import { createArtist } from "@/app/actions/artists";
+import { Button } from "@/components/ui/button";
 
 const PRESET_AVATARS = [
   { label: "Male Creator 1", url: "/creators/divyesh.jpg" },
@@ -84,33 +85,33 @@ export function AddArtistModal() {
 
   return (
     <>
-      <button
+      <Button
         onClick={() => {
           resetForm();
           setIsOpen(true);
         }}
-        className="px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-xs font-heading font-semibold tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 inline-flex items-center gap-2 cursor-pointer active:scale-95"
+        className="bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-medium"
       >
-        <Plus className="w-4 h-4" />
+        <Plus className="w-4 h-4 mr-1" />
         <span>Add New Creator</span>
-      </button>
+      </Button>
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto">
-          <div className="relative w-full max-w-2xl my-8 rounded-3xl bg-[#0c1018] border border-white/10 p-6 sm:p-8 shadow-2xl">
+          <div className="relative w-full max-w-2xl my-8 rounded-2xl bg-[#111114] border border-zinc-850 p-6 sm:p-8 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+            <div className="flex items-center justify-between pb-4 border-b border-zinc-850 mb-6">
               <div>
-                <span className="text-xs uppercase font-mono tracking-widest text-indigo-400 block mb-1">
+                <span className="text-xs uppercase font-mono tracking-widest text-zinc-500 block mb-1">
                   Staff Roster Management
                 </span>
-                <h3 className="text-xl sm:text-2xl font-heading font-black text-white uppercase tracking-tight">
+                <h3 className="text-xl sm:text-2xl font-heading font-bold text-white tracking-tight">
                   Add Creator to Directory
                 </h3>
               </div>
               <button
                 onClick={() => setIsOpen(false)}
-                className="p-2 text-zinc-400 hover:text-white rounded-full bg-white/[0.04] hover:bg-white/10 transition-colors cursor-pointer"
+                className="p-1.5 text-zinc-400 hover:text-white rounded-lg hover:bg-zinc-900 transition-colors cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -307,20 +308,23 @@ export function AddArtistModal() {
 
               {/* Action Buttons */}
               <div className="pt-2 flex items-center justify-end gap-3">
-                <button
+                <Button
                   type="button"
+                  variant="outline"
+                  size="sm"
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2.5 rounded-xl border border-white/10 text-zinc-400 hover:text-white text-xs uppercase tracking-wider font-semibold cursor-pointer"
+                  className="border-zinc-800 text-zinc-400 hover:text-white"
                 >
                   Cancel
-                </button>
-                <button
+                </Button>
+                <Button
                   type="submit"
                   disabled={isPending}
-                  className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white rounded-xl text-xs font-heading font-bold tracking-wider uppercase transition-all shadow-lg shadow-indigo-600/30 disabled:opacity-50 cursor-pointer"
+                  size="sm"
+                  className="bg-white text-zinc-950 hover:bg-zinc-200 font-medium text-xs px-5"
                 >
                   {isPending ? "Publishing Creator..." : "Create & Publish"}
-                </button>
+                </Button>
               </div>
             </form>
           </div>

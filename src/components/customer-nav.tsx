@@ -2,8 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Menu, X, ArrowUpRight, Sparkles, User, LogOut, Shield } from "lucide-react";
+import { Menu, X, ArrowUpRight, User, LogOut, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 interface CustomerNavProps {
   user: any;
@@ -31,25 +33,25 @@ export function CustomerNav({ user, isAdmin, logoutAction }: CustomerNavProps) {
   return (
     <>
       {/* Desktop Navigation */}
-      <nav className="hidden md:flex items-center space-x-7 text-xs tracking-wider uppercase font-medium">
+      <nav className="hidden md:flex items-center space-x-6 text-xs tracking-wider uppercase font-medium">
         <a
           href="/#roster"
           onClick={(e) => handleNavClick(e, "roster")}
-          className="text-zinc-300 hover:text-white transition-colors duration-200 cursor-pointer"
+          className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
         >
-          Creators
+          Talent Roster
         </a>
         <a
           href="/#impact"
           onClick={(e) => handleNavClick(e, "impact")}
-          className="text-zinc-400 hover:text-white transition-colors duration-200 cursor-pointer"
+          className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
         >
-          Impact
+          Agency Impact
         </a>
         <a
           href="/#press"
           onClick={(e) => handleNavClick(e, "press")}
-          className="text-zinc-400 hover:text-white transition-colors duration-200 cursor-pointer"
+          className="text-zinc-400 hover:text-white transition-colors cursor-pointer"
         >
           Press
         </a>
@@ -58,125 +60,107 @@ export function CustomerNav({ user, isAdmin, logoutAction }: CustomerNavProps) {
         {user && (
           <Link
             href="/my-bookings"
-            className="text-zinc-300 hover:text-white transition-colors duration-200 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/20"
+            className="text-zinc-300 hover:text-white transition-colors inline-flex items-center gap-2 px-3 py-1.5 rounded-md bg-zinc-900 border border-zinc-800 text-xs"
           >
-            <span>My Bookings</span>
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span>My Inquiries</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
           </Link>
         )}
 
         {/* Staff Portal Link (Admin only) */}
         {isAdmin && (
-          <Link
-            href="/admin"
-            className="px-3.5 py-1.5 rounded-full text-indigo-300 bg-indigo-500/10 border border-indigo-500/30 hover:bg-indigo-500/20 transition-all text-[11px] font-mono tracking-wider inline-flex items-center gap-1.5"
-          >
-            <Shield className="w-3 h-3" />
-            <span>Staff Portal</span>
-          </Link>
+          <Button variant="outline" size="sm" asChild className="h-8 text-xs border-zinc-700 bg-zinc-900/80 hover:bg-zinc-800 text-zinc-200">
+            <Link href="/admin">
+              <Shield className="w-3 h-3 text-zinc-400" />
+              <span>Staff Desk</span>
+            </Link>
+          </Button>
         )}
 
         {/* Auth CTA */}
         {user ? (
           <div className="flex items-center space-x-3">
-            <span className="text-[11px] font-mono text-zinc-400 hidden lg:inline-block truncate max-w-[140px]">
+            <span className="text-xs font-mono text-zinc-400 hidden lg:inline-block truncate max-w-[140px]">
               {user.email?.split("@")[0]}
             </span>
             <form action={logoutAction}>
-              <button
-                type="submit"
-                className="px-4 py-2 border border-white/15 hover:border-white/40 text-zinc-300 hover:text-white transition-all text-[11px] font-mono tracking-wider uppercase rounded-full cursor-pointer hover:bg-white/5"
-              >
+              <Button type="submit" variant="ghost" size="sm" className="text-zinc-400 hover:text-white text-xs">
                 Sign Out
-              </button>
+              </Button>
             </form>
           </div>
         ) : (
-          <Link
-            href="/login"
-            className="px-5 py-2.5 bg-gradient-to-r from-indigo-500 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-heading font-semibold text-xs tracking-wider uppercase rounded-full shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
-          >
-            Sign In
-          </Link>
+          <Button size="sm" asChild className="bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-medium px-4">
+            <Link href="/login">Client Access</Link>
+          </Button>
         )}
       </nav>
 
       {/* Mobile Hamburger Action */}
-      <div className="flex md:hidden items-center space-x-2.5">
+      <div className="flex md:hidden items-center space-x-2">
         {user ? (
           <form action={logoutAction}>
-            <button
-              type="submit"
-              className="px-3 py-1.5 border border-white/20 text-zinc-300 text-[11px] font-mono tracking-wider uppercase rounded-full hover:bg-white/5"
-            >
+            <Button type="submit" variant="ghost" size="sm" className="text-xs text-zinc-400">
               Sign Out
-            </button>
+            </Button>
           </form>
         ) : (
-          <Link
-            href="/login"
-            className="px-3.5 py-1.5 bg-indigo-600 text-white text-[11px] font-heading font-semibold tracking-wider uppercase rounded-full shadow"
-          >
-            Sign In
-          </Link>
+          <Button size="sm" asChild className="h-8 text-xs px-3 bg-white text-zinc-950 hover:bg-zinc-200">
+            <Link href="/login">Client Access</Link>
+          </Button>
         )}
 
         <button
+          type="button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-2.5 rounded-full bg-white/[0.05] border border-white/10 text-zinc-300 hover:text-white transition-colors cursor-pointer min-w-[42px] min-h-[42px] flex items-center justify-center"
-          aria-label="Toggle navigation menu"
+          className="p-2 rounded-lg border border-zinc-800 text-zinc-300 hover:text-white hover:bg-zinc-900 transition-colors"
+          aria-label="Toggle Navigation Menu"
         >
           {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
       </div>
 
-      {/* Mobile Drawer Menu */}
+      {/* Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -15 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -15 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed inset-x-0 top-20 z-40 bg-[#0a0d14]/98 backdrop-blur-2xl border-b border-white/10 p-5 md:hidden shadow-2xl"
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-x-0 top-16 sm:top-20 z-40 bg-[#09090b] border-b border-zinc-850 p-6 shadow-2xl flex flex-col space-y-4 md:hidden"
           >
-            <div className="flex flex-col space-y-1 text-sm tracking-wider uppercase font-heading font-semibold">
+            <div className="flex flex-col space-y-3 text-sm uppercase tracking-wider font-medium">
               <a
                 href="/#roster"
                 onClick={(e) => handleNavClick(e, "roster")}
-                className="text-zinc-200 hover:text-white py-3.5 px-3 rounded-xl hover:bg-white/5 flex items-center justify-between cursor-pointer"
+                className="py-2.5 px-3 rounded-lg hover:bg-zinc-900 text-zinc-200"
               >
-                <span>Creators Roster</span>
-                <ArrowUpRight className="w-4 h-4 text-zinc-500" />
+                Talent Roster
               </a>
               <a
                 href="/#impact"
                 onClick={(e) => handleNavClick(e, "impact")}
-                className="text-zinc-200 hover:text-white py-3.5 px-3 rounded-xl hover:bg-white/5 flex items-center justify-between cursor-pointer"
+                className="py-2.5 px-3 rounded-lg hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200"
               >
-                <span>Agency Impact</span>
-                <ArrowUpRight className="w-4 h-4 text-zinc-500" />
+                Agency Impact
               </a>
               <a
                 href="/#press"
                 onClick={(e) => handleNavClick(e, "press")}
-                className="text-zinc-200 hover:text-white py-3.5 px-3 rounded-xl hover:bg-white/5 flex items-center justify-between cursor-pointer"
+                className="py-2.5 px-3 rounded-lg hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200"
               >
-                <span>Press & Media</span>
-                <ArrowUpRight className="w-4 h-4 text-zinc-500" />
+                Press & Media
               </a>
 
               {user && (
                 <Link
                   href="/my-bookings"
                   onClick={closeMobile}
-                  className="text-emerald-300 hover:text-emerald-200 py-3.5 px-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-between"
+                  className="py-2.5 px-3 rounded-lg bg-zinc-900 border border-zinc-800 text-zinc-200 flex items-center justify-between"
                 >
-                  <span className="flex items-center gap-2">
-                    <span>My Bookings</span>
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                  </span>
-                  <ArrowUpRight className="w-4 h-4 text-emerald-400" />
+                  <span>My Inquiries</span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" />
                 </Link>
               )}
 
@@ -184,14 +168,32 @@ export function CustomerNav({ user, isAdmin, logoutAction }: CustomerNavProps) {
                 <Link
                   href="/admin"
                   onClick={closeMobile}
-                  className="text-indigo-300 hover:text-indigo-200 py-3.5 px-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-between"
+                  className="py-2.5 px-3 rounded-lg bg-zinc-900 border border-zinc-700 text-zinc-200 flex items-center gap-2"
                 >
-                  <span className="flex items-center gap-2">
-                    <Shield className="w-4 h-4" />
-                    <span>Staff Portal</span>
-                  </span>
-                  <ArrowUpRight className="w-4 h-4 text-indigo-400" />
+                  <Shield className="w-4 h-4 text-zinc-400" />
+                  <span>Staff Desk</span>
                 </Link>
+              )}
+            </div>
+
+            <div className="pt-4 border-t border-zinc-850">
+              {user ? (
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono text-zinc-400">
+                    {user.email}
+                  </span>
+                  <form action={logoutAction}>
+                    <Button type="submit" variant="outline" size="sm" className="border-zinc-800">
+                      Sign Out
+                    </Button>
+                  </form>
+                </div>
+              ) : (
+                <Button asChild className="w-full bg-white text-zinc-950 hover:bg-zinc-200">
+                  <Link href="/login" onClick={closeMobile}>
+                    Client Access
+                  </Link>
+                </Button>
               )}
             </div>
           </motion.div>

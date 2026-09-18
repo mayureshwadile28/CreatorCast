@@ -1,23 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #07080b;
-  --foreground: #f8fafc;
-  --card: #0d111a;
-  --card-foreground: #f8fafc;
-  --popover: #0d111a;
-  --popover-foreground: #f8fafc;
-  --primary: #6366f1;
-  --primary-foreground: #ffffff;
-  --secondary: #161b26;
-  --secondary-foreground: #f8fafc;
-  --muted: #161b26;
-  --muted-foreground: #94a3b8;
-  --accent: #202738;
-  --accent-foreground: #f8fafc;
-  --border: rgba(255, 255, 255, 0.08);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: #818cf8;
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #111114;
+  --card-foreground: #fafafa;
+  --popover: #111114;
+  --popover-foreground: #fafafa;
+  --primary: #fafafa;
+  --primary-foreground: #18181b;
+  --secondary: #1e1e24;
+  --secondary-foreground: #fafafa;
+  --muted: #1e1e24;
+  --muted-foreground: #a1a1aa;
+  --accent: #27272a;
+  --accent-foreground: #fafafa;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #d4d4d8;
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -39,12 +40,12 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  background-color: #07080b;
+  background-color: #09090b;
 }
 
 body {
-  background-color: #07080b;
-  color: #f8fafc;
+  background-color: #09090b;
+  color: #fafafa;
   font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   overflow-x: clip;
 }
@@ -53,19 +54,19 @@ body {
   font-family: var(--font-outfit), sans-serif;
 }
 
-/* Custom scrollbar */
+/* Custom minimal scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 5px;
 }
 ::-webkit-scrollbar-track {
-  background: #07080b;
+  background: #09090b;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1e2535;
-  border-radius: 3px;
+  background: #27272a;
+  border-radius: 2.5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #3f3f46;
 }
 
 /* Date input dark mode styling */
@@ -82,103 +83,24 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   opacity: 1;
 }
 
-/* Modern Glass & Neon Design System */
-.glass-panel {
-  background: rgba(13, 17, 26, 0.65);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+/* Subtle Architectural Grid Background */
+.bg-agency-grid {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
-.glass-card {
-  background: rgba(13, 17, 26, 0.6);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.glass-card:hover {
-  background: rgba(20, 26, 40, 0.75);
-  border-color: rgba(99, 102, 241, 0.4);
-  box-shadow: 0 20px 40px -15px rgba(99, 102, 241, 0.15);
-  transform: translateY(-2px);
-}
-
+/* Official Glass & Backdrop Styles */
 .glass-nav {
-  background: rgba(7, 8, 11, 0.8);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+  background: rgba(9, 9, 11, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .glass-modal {
-  background: rgba(10, 13, 20, 0.94);
-  backdrop-filter: blur(32px);
-  -webkit-backdrop-filter: blur(32px);
+  background: #0d0d10;
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9);
-}
-
-.glass-pill {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-}
-
-.glass-pill:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.neon-pill {
-  background: rgba(99, 102, 241, 0.12);
-  border: 1px solid rgba(99, 102, 241, 0.3);
-  color: #c7d2fe;
-}
-
-.neon-pill-active {
-  background: #6366f1;
-  border-color: #818cf8;
-  color: #ffffff;
-  box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-}
-
-/* Vibrant Ambient Lighting */
-.ambient-glow-top {
-  position: absolute;
-  top: -160px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 900px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.1) 30%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.ambient-glow-side {
-  position: absolute;
-  top: 35%;
-  right: -120px;
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-.ambient-glow-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 10%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.08) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.85);
 }

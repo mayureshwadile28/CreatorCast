@@ -5,6 +5,7 @@ import { AddArtistModal } from "./add-artist-modal";
 import Link from "next/link";
 import Image from "next/image";
 import { ExternalLink, Sparkles, UserCheck } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 export default async function AdminArtistsPage() {
   let artists: any[] = [];
@@ -114,9 +115,9 @@ export default async function AdminArtistsPage() {
                         </div>
                       </td>
                       <td className="p-4 whitespace-nowrap">
-                        <span className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-mono bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full">
+                        <Badge variant="tag" className="bg-zinc-900 border-zinc-800 text-zinc-300 text-[10px]">
                           {(artist as any).category || "CREATOR"}
-                        </span>
+                        </Badge>
                       </td>
                       <td className="p-4 hidden md:table-cell text-zinc-400 font-mono text-[11px]">
                         {artist.user?.email || "Internal System"}

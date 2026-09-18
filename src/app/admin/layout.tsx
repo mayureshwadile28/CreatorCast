@@ -5,6 +5,8 @@ import { createClient } from "@/utils/supabase/server";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
 import { logout } from "@/app/actions/auth";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 export default async function AdminLayout({
   children,
@@ -39,30 +41,23 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#07080b] text-[#f8fafc] relative selection:bg-indigo-500 selection:text-white">
-      {/* Ambient background glows */}
-      <div className="ambient-glow-top" />
-      <div className="ambient-glow-side" />
-
-      {/* Staff Luxury Glass Header (Fixed on scroll) */}
-      <header className="fixed top-0 left-0 right-0 z-50 w-full glass-nav px-4 sm:px-6 md:px-12 h-20 flex items-center justify-between">
+    <div className="min-h-screen flex flex-col bg-[#09090b] text-[#fafafa] relative selection:bg-zinc-100 selection:text-zinc-950">
+      {/* Fixed Staff Navigation Header */}
+      <header className="fixed top-0 left-0 right-0 z-50 w-full glass-nav px-4 sm:px-6 md:px-12 h-16 sm:h-20 flex items-center justify-between border-b border-zinc-850">
         <div className="flex items-center space-x-6 sm:space-x-8">
           <Link href="/admin" className="flex items-center space-x-2.5 group">
-            <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <span className="font-heading font-black text-white text-base">C</span>
+            <span className="font-heading font-bold text-base tracking-[0.2em] uppercase text-white">
+              CREATORCAST
             </span>
-            <span className="font-heading font-black text-lg md:text-xl tracking-wider uppercase text-white">
-              CreatorCast
-            </span>
-            <span className="text-[10px] uppercase font-mono tracking-wider px-2 py-0.5 bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 rounded-full">
-              Staff
-            </span>
+            <Badge variant="tag" className="bg-zinc-900 border-zinc-700 text-zinc-300">
+              Staff Desk
+            </Badge>
           </Link>
 
           <nav className="hidden sm:flex items-center space-x-5 text-xs uppercase tracking-wider font-medium">
             <Link
               href="/admin"
-              className="text-zinc-300 hover:text-white transition-colors"
+              className="text-zinc-400 hover:text-white transition-colors"
             >
               Overview
             </Link>
@@ -70,15 +65,15 @@ export default async function AdminLayout({
               href="/admin/artists"
               className="text-zinc-400 hover:text-white transition-colors"
             >
-              Roster
+              Talent Roster
             </Link>
             <Link
               href="/admin/bookings"
-              className="text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1.5"
+              className="text-zinc-400 hover:text-white transition-colors flex items-center gap-1.5"
             >
-              <span>Bookings</span>
+              <span>Inquiries</span>
               {pendingBadge > 0 && (
-                <span className="w-4 h-4 rounded-full bg-amber-500 text-black text-[10px] font-bold font-mono flex items-center justify-center">
+                <span className="w-4 h-4 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono flex items-center justify-center font-bold">
                   {pendingBadge}
                 </span>
               )}
@@ -87,34 +82,37 @@ export default async function AdminLayout({
               href="/admin/users"
               className="text-zinc-400 hover:text-white transition-colors"
             >
-              Users
+              User Audit
             </Link>
           </nav>
         </div>
 
-        <div className="flex items-center space-x-4 sm:space-x-6">
-          <Link
-            href="/"
-            className="hidden md:inline-block text-xs uppercase tracking-wider text-zinc-400 hover:text-indigo-300 transition-colors font-mono"
-          >
-            Public Site &rarr;
-          </Link>
-          <div className="text-right hidden sm:block">
-            <p className="text-xs font-mono text-zinc-400">{user.email}</p>
-          </div>
+        <div className="flex items-center space-x-3">
+          <Button variant="ghost" size="sm" asChild className="hidden sm:inline-flex text-xs text-zinc-400 hover:text-white">
+            <Link href="/">
+              Public Site
+            </Link>
+          </Button>
+
+          <span className="text-xs font-mono text-zinc-500 hidden md:inline-block">
+            {user.email}
+          </span>
+
           <form action={logout}>
-            <button
+            <Button
               type="submit"
-              className="text-[11px] uppercase tracking-wider font-mono px-3.5 py-1.5 border border-white/10 hover:border-white/30 text-zinc-300 hover:text-white transition-colors cursor-pointer rounded-full hover:bg-white/5"
+              variant="outline"
+              size="sm"
+              className="text-xs border-zinc-800 text-zinc-300 hover:text-white"
             >
               Sign Out
-            </button>
+            </Button>
           </form>
         </div>
       </header>
 
-      {/* Main Container with top padding for fixed header */}
-      <main className="flex-1 max-w-7xl w-full mx-auto pt-24 pb-16 relative z-10 px-4 sm:px-6 md:px-12">
+      {/* Main Content Area */}
+      <main className="flex-1 pt-16 sm:pt-20 p-4 sm:p-6 md:p-8 max-w-7xl mx-auto w-full relative z-10">
         {children}
       </main>
     </div>

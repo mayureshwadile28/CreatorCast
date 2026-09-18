@@ -11,6 +11,7 @@ interface BookingModalProps {
   artistId: string;
   artistName: string;
   artistCategory?: string | null;
+  currentUser?: any;
   initialName?: string;
   initialEmail?: string;
   isOpen?: boolean;
@@ -22,6 +23,7 @@ export function BookingModal({
   artistId,
   artistName,
   artistCategory,
+  currentUser,
   initialName = "",
   initialEmail = "",
   isOpen: externalIsOpen,
@@ -34,14 +36,17 @@ export function BookingModal({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  const defaultName = initialName || currentUser?.user_metadata?.full_name || currentUser?.user_metadata?.name || "";
+  const defaultEmail = initialEmail || currentUser?.email || "";
+
   const dateInputRef = useRef<HTMLInputElement>(null);
 
   const isControlled = externalIsOpen !== undefined;
   const activeOpen = isControlled ? externalIsOpen : internalIsOpen;
 
   const [formData, setFormData] = useState({
-    name: initialName,
-    email: initialEmail,
+    name: defaultName,
+    email: defaultEmail,
     company: "",
     eventType: "Brand Campaign",
     budget: "₹3,00,000 - ₹8,00,000",
@@ -53,10 +58,10 @@ export function BookingModal({
   useEffect(() => {
     setFormData((prev) => ({
       ...prev,
-      name: prev.name || initialName,
-      email: prev.email || initialEmail,
+      name: prev.name || defaultName,
+      email: prev.email || defaultEmail,
     }));
-  }, [initialName, initialEmail]);
+  }, [defaultName, defaultEmail]);
 
   // Ensure portal only mounts on client
   useEffect(() => {
@@ -368,7 +373,7 @@ export function BookingModal({
                     <button
                       type="submit"
                       disabled={loading}
-                      className="px-6 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs uppercase tracking-wider font-heading font-bold disabled:opacity-50 cursor-pointer shadow-lg shadow-indigo-600/30 rounded-xl shrink-0 transition-all"
+                      className="px-6 py-2.5 bg-white text-zinc-950 hover:bg-zinc-200 text-xs font-medium rounded-lg disabled:opacity-50 cursor-pointer shrink-0 transition-all shadow-sm"
                     >
                       {loading ? "Transmitting..." : "Submit Inquiry"}
                     </button>
@@ -387,10 +392,10 @@ export function BookingModal({
       {!hideTrigger && !isControlled && (
         <button
           onClick={() => setInternalIsOpen(true)}
-          className="group relative inline-flex items-center justify-between gap-4 px-8 py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-heading font-bold text-xs tracking-wider uppercase transition-all duration-300 cursor-pointer shadow-lg shadow-indigo-600/30 rounded-full active:scale-95"
+          className="group relative inline-flex items-center justify-between gap-3 px-6 py-3 bg-white text-zinc-950 hover:bg-zinc-200 font-medium text-sm transition-all duration-200 cursor-pointer rounded-lg shadow-sm active:scale-95"
         >
-          <span>Request Booking</span>
-          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+          <span>Request Commercial Booking</span>
+          <ArrowRight className="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
         </button>
       )}
 
